@@ -1,0 +1,19 @@
+<section class="grid gap-6">
+  <div>
+    <p class="text-sm text-emerald-300">Plano de estiva</p>
+    <h1 class="text-2xl font-semibold text-[#F8FAFC]"><%= @stowage_plan.cargo.customer_name %></h1>
+    <p class="mt-1 text-[#94A3B8]">Veículo: <%= @stowage_plan.vehicle.name %></p>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-4">
+    <div class="rounded-lg border border-[#334155] bg-[#111827] p-5"><p class="text-sm text-[#94A3B8]">Score</p><p class="mt-2 text-2xl font-semibold"><%= @stowage_plan.score %></p></div>
+    <div class="rounded-lg border border-[#334155] bg-[#111827] p-5"><p class="text-sm text-[#94A3B8]">Volume</p><p class="mt-2 text-2xl font-semibold"><%= @stowage_plan.volume_usage_percent %>%</p></div>
+    <div class="rounded-lg border border-[#334155] bg-[#111827] p-5"><p class="text-sm text-[#94A3B8]">Peso</p><p class="mt-2 text-2xl font-semibold"><%= @stowage_plan.weight_usage_percent %>%</p></div>
+    <div class="rounded-lg border border-[#334155] bg-[#111827] p-5"><p class="text-sm text-[#94A3B8]">Paletes</p><p class="mt-2 text-2xl font-semibold"><%= @stowage_plan.pallet_count %></p></div>
+  </div>
+
+  <div class="rounded-lg border border-[#334155] bg-[#111827] p-5">
+    <h2 class="font-semibold text-[#F8FAFC]">Notas</h2>
+    <p class="mt-2 text-[#94A3B8]"><%= @stowage_plan.notes %></p>
+  </div>
+</section>

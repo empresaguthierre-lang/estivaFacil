@@ -1,0 +1,188 @@
+<section class="grid gap-6">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400 ring-1 ring-emerald-500/20">
+          <%= @cargo.status.humanize %>
+        </span>
+        <span class="text-xs text-slate-500 font-mono">ID: <%= @cargo.id.split('-').first rescue @cargo.id %></span>
+      </div>
+      <h1 class="mt-1 text-2xl font-bold tracking-tight text-[#F8FAFC]"><%= @cargo.customer_name %></h1>
+      <p class="mt-1 text-xs text-[#94A3B8]">
+        <span class="inline-flex items-center gap-1">
+          <%= lucide_icon(:route, css: "h-3.5 w-3.5 text-slate-500") %>
+          <%= @cargo.origin %> para <%= @cargo.destination %>
+        </span>
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <%= button_to duplicate_cargo_path(@cargo), method: :post, class: "inline-flex items-center gap-1.5 rounded-md border border-[#1E294B] bg-[#131B2E] px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-[#1E294B] hover:text-white focus:outline-none" do %>
+        <%= lucide_icon(:plus, css: "h-4 w-4") %>
+        Duplicar carga
+      <% end %>
+      <%= link_to edit_cargo_path(@cargo), class: "inline-flex items-center gap-1.5 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 px-4 py-2 text-sm font-semibold text-[#06131E] shadow-md shadow-emerald-950/20 transition-all hover:from-emerald-500 hover:to-teal-400 hover:scale-[1.02]" do %>
+        <%= lucide_icon(:edit, css: "h-4 w-4") %>
+        Editar
+      <% end %>
+      <%= link_to cargos_path, class: "rounded-md border border-[#1E294B] bg-[#131B2E] px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-[#1E294B] hover:text-white" do %>
+        Voltar
+      <% end %>
+    </div>
+  </div>
+
+  <div class="grid gap-4 grid-cols-2 md:grid-cols-6">
+    <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-4 shadow-md backdrop-blur-md">
+      <p class="text-xs text-[#94A3B8]">Unidades</p>
+      <p class="mt-1.5 text-2xl font-bold text-[#F8FAFC]"><%= @cargo.total_units %></p>
+    </div>
+    <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-4 shadow-md backdrop-blur-md">
+      <p class="text-xs text-[#94A3B8]">Embalagens</p>
+      <p class="mt-1.5 text-2xl font-bold text-[#F8FAFC]"><%= @cargo.total_packages %></p>
+    </div>
+    <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-4 shadow-md backdrop-blur-md">
+      <p class="text-xs text-[#94A3B8]">Paletes</p>
+      <p class="mt-1.5 text-2xl font-bold text-[#F8FAFC]"><%= @cargo.total_pallets %></p>
+    </div>
+    <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-4 shadow-md backdrop-blur-md">
+      <p class="text-xs text-[#94A3B8]">Peso total</p>
+      <p class="mt-1.5 text-2xl font-bold text-[#F8FAFC] font-mono"><%= number_with_precision(@cargo.total_weight_kg, precision: 2) %> <span class="text-xs font-normal text-slate-400">kg</span></p>
+    </div>
+    <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-4 shadow-md backdrop-blur-md">
+      <p class="text-xs text-[#94A3B8]">Cubagem</p>
+      <p class="mt-1.5 text-2xl font-bold text-[#F8FAFC] font-mono"><%= number_with_precision(@cargo.total_volume_m3, precision: 3) %> <span class="text-xs font-normal text-slate-400">m³</span></p>
+    </div>
+    <div class="col-span-2 md:col-span-1 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4 shadow-md shadow-emerald-950/10">
+      <p class="text-xs font-semibold text-emerald-400">Veículo sugerido</p>
+      <% if @cargo.recommended_vehicle.present? %>
+        <p class="mt-1.5 text-xl font-bold text-emerald-300 truncate"><%= @cargo.recommended_vehicle.name %></p>
+      <% else %>
+        <p class="mt-1.5 text-sm font-semibold text-slate-500 italic">Sem sugestão</p>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @cargo.stowage_plan.present? %>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-5 shadow-xl shadow-slate-950/20 backdrop-blur-md">
+        <h2 class="text-sm font-semibold text-[#F8FAFC] flex items-center gap-2">
+          <%= lucide_icon(:chart, css: "h-4 w-4 text-emerald-400") %>
+          Ocupação do veículo
+        </h2>
+        <div class="mt-4 grid gap-4">
+          <div>
+            <div class="flex justify-between text-xs text-[#94A3B8] mb-1">
+              <span>Volume Ocupado</span>
+              <span class="font-semibold text-teal-400"><%= @cargo.stowage_plan.volume_usage_percent %>%</span>
+            </div>
+            <div class="h-2.5 rounded-full bg-[#090D16] overflow-hidden border border-[#1E294B]/60">
+              <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500" style="width: <%= [@cargo.stowage_plan.volume_usage_percent, 100].min %>%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs text-[#94A3B8] mb-1">
+              <span>Peso Ocupado</span>
+              <span class="font-semibold text-blue-400"><%= @cargo.stowage_plan.weight_usage_percent %>%</span>
+            </div>
+            <div class="h-2.5 rounded-full bg-[#090D16] overflow-hidden border border-[#1E294B]/60">
+              <div class="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-400 transition-all duration-500" style="width: <%= [@cargo.stowage_plan.weight_usage_percent, 100].min %>%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-5 shadow-xl shadow-slate-950/20 backdrop-blur-md">
+        <h2 class="text-sm font-semibold text-[#F8FAFC] flex items-center gap-2">
+          <%= lucide_icon(:clipboard, css: "h-4 w-4 text-emerald-400") %>
+          Plano de estiva (Pontuação: <%= @cargo.stowage_plan.score %>)
+        </h2>
+        <p class="mt-3 text-xs leading-5 text-slate-300 max-h-[100px] overflow-y-auto pr-1"><%= @cargo.stowage_plan.notes %></p>
+      </div>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div class="rounded-lg border border-amber-500/20 bg-amber-500/5 p-5 shadow-md">
+        <h2 class="font-semibold text-amber-400 flex items-center gap-2 text-sm">
+          <%= lucide_icon(:activity, css: "h-4 w-4 text-amber-400") %>
+          Alertas operacionais
+        </h2>
+        <ul class="mt-3 grid gap-1.5 text-xs text-amber-300">
+          <% (@cargo.stowage_plan.warning_list.presence || [ "Sem alertas críticos." ]).each do |warning| %>
+            <li class="flex items-start gap-1.5">• <span><%= warning %></span></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="rounded-lg border border-blue-500/20 bg-blue-500/5 p-5 shadow-md">
+        <h2 class="font-semibold text-blue-400 flex items-center gap-2 text-sm">
+          <%= lucide_icon(:boxes, css: "h-4 w-4 text-blue-400") %>
+          Recomendações técnicas
+        </h2>
+        <ul class="mt-3 grid gap-1.5 text-xs text-blue-300">
+          <% (@cargo.stowage_plan.recommendation_list.presence || [ "Sem recomendações pendentes." ]).each do |recommendation| %>
+            <li class="flex items-start gap-1.5">• <span><%= recommendation %></span></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 shadow-xl shadow-slate-950/20 backdrop-blur-md">
+    <div class="border-b border-[#1E294B] px-5 py-4">
+      <h2 class="font-semibold text-[#F8FAFC] text-sm flex items-center gap-2">
+        <%= lucide_icon(:boxes, css: "h-4 w-4 text-teal-400") %>
+        Itens calculados
+      </h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[1120px] text-left text-sm">
+        <thead class="bg-[#090D16]/50 text-xs uppercase text-[#94A3B8] border-b border-[#1E294B]">
+          <tr>
+            <th class="px-5 py-3 font-semibold">Produto</th>
+            <th class="px-5 py-3 font-semibold">Método</th>
+            <th class="px-5 py-3 font-semibold">Qtd.</th>
+            <th class="px-5 py-3 font-semibold">Unidades</th>
+            <th class="px-5 py-3 font-semibold">Embalagens</th>
+            <th class="px-5 py-3 font-semibold">Paletes</th>
+            <th class="px-5 py-3 font-semibold">Peso</th>
+            <th class="px-5 py-3 font-semibold">Cubagem</th>
+            <th class="px-5 py-3 font-semibold">Regras</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#1E294B]/60">
+          <% @cargo.cargo_items.each do |item| %>
+            <tr class="transition-colors duration-150 hover:bg-[#1E294B]/20">
+              <td class="px-5 py-4">
+                <p class="font-semibold text-[#F8FAFC]"><%= item.product_name_snapshot || item.description %></p>
+                <p class="text-xs text-slate-500 font-mono">ID: <%= item.product_internal_code_snapshot.presence || "-" %> | REF: <%= item.product_ref_code_snapshot.presence || "-" %></p>
+              </td>
+              <td class="px-5 py-4 text-[#F8FAFC]"><%= item.count_method.humanize %></td>
+              <td class="px-5 py-4 text-[#94A3B8] font-semibold"><%= number_with_precision(item.count_quantity, precision: 3, strip_insignificant_zeros: true) %></td>
+              <td class="px-5 py-4 text-[#94A3B8] font-mono text-xs"><%= item.total_units %></td>
+              <td class="px-5 py-4 text-[#94A3B8] font-mono text-xs"><%= item.total_packages %> <%= item.package_label %></td>
+              <td class="px-5 py-4 text-[#94A3B8] font-mono text-xs"><%= item.total_pallets %></td>
+              <td class="px-5 py-4 text-[#F8FAFC] font-medium"><%= number_with_precision(item.total_weight_kg, precision: 2) %> kg</td>
+              <td class="px-5 py-4 text-teal-400 font-medium"><%= number_with_precision(item.total_volume_m3, precision: 3) %> m³</td>
+              <td class="px-5 py-4">
+                <div class="flex flex-wrap gap-1">
+                  <% if item.stackable? %>
+                    <span class="rounded-full bg-emerald-500/10 px-2 py-0.5 text-2xs font-semibold text-emerald-400 ring-1 ring-emerald-500/20">Empilhável <%= item.max_stack_layers %>x</span>
+                  <% else %>
+                    <span class="rounded-full bg-slate-500/10 px-2 py-0.5 text-2xs font-semibold text-slate-400 ring-1 ring-slate-500/10">Não empilhável</span>
+                  <% end %>
+                  <% if item.fragile? %>
+                    <span class="rounded-full bg-amber-500/10 px-2 py-0.5 text-2xs font-semibold text-amber-400 ring-1 ring-amber-500/20">Frágil</span>
+                  <% end %>
+                  <% if item.hazardous? %>
+                    <span class="rounded-full bg-red-500/10 px-2 py-0.5 text-2xs font-semibold text-red-400 ring-1 ring-red-500/20">Perigoso</span>
+                  <% end %>
+                  <% unless item.can_rotate? %>
+                    <span class="rounded-full bg-blue-500/10 px-2 py-0.5 text-2xs font-semibold text-blue-400 ring-1 ring-blue-500/20">Não gira</span>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

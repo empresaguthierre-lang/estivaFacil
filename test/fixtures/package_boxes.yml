@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company: one
+  name: MyString
+  length_cm: 9.99
+  width_cm: 9.99
+  height_cm: 9.99
+  units_per_package: 1
+  package_weight_kg: 9.99
+  active: false
+
+two:
+  company: two
+  name: MyString
+  length_cm: 9.99
+  width_cm: 9.99
+  height_cm: 9.99
+  units_per_package: 1
+  package_weight_kg: 9.99
+  active: false

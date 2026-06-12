@@ -1,0 +1,90 @@
+<div class="grid gap-4 rounded-lg border border-[#334155] bg-[#0F172A] p-4 transition hover:border-[#10B981]/40" data-cargo-items-row>
+  <div class="grid gap-4 lg:grid-cols-[1.4fr_180px_140px_120px]">
+    <div>
+      <%= item_form.label :product_id, "Produto", class: "mb-1 block text-sm font-medium text-[#F8FAFC]" %>
+      <%= item_form.select :product_id,
+        options_for_select(product_options, item_form.object.product_id),
+        { prompt: "Buscar por nome, SKU ou referência" },
+        required: true,
+        class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC] outline-none transition focus:border-[#10B981] focus:ring-2 focus:ring-[#10B981]/30",
+        data: { cargo_items_target: "product", action: "cargo-items#productChanged" } %>
+      <p class="mt-1 text-xs text-[#94A3B8]">Nome | SKU | Referência</p>
+    </div>
+    <div>
+      <%= item_form.label :count_method, "Método de contagem", class: "mb-1 block text-sm font-medium text-[#F8FAFC]" %>
+      <%= item_form.select :count_method, CargoItem::COUNT_METHODS.map { |method| [method.humanize, method] }, {}, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "method", action: "cargo-items#preview" } %>
+    </div>
+    <div>
+      <%= item_form.label :count_quantity, "Quantidade", class: "mb-1 block text-sm font-medium text-[#F8FAFC]" %>
+      <%= item_form.number_field :count_quantity, min: 0.001, step: 0.001, required: true, value: item_form.object.count_quantity || item_form.object.quantity || 1, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "quantity", action: "cargo-items#preview" } %>
+      <%= item_form.hidden_field :quantity, value: item_form.object.quantity || 1 %>
+    </div>
+    <div class="flex items-end">
+      <%= item_form.hidden_field :_destroy, value: "0" %>
+      <button type="button" class="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#334155] bg-[#1F2937] px-3 py-2 text-sm font-semibold text-[#F8FAFC] transition hover:border-[#EF4444]/50 hover:bg-[#EF4444]/15 hover:text-red-200 focus:outline-none focus:ring-2 focus:ring-[#EF4444]/30" data-action="cargo-items#remove">
+        <%= lucide_icon(:trash, css: "h-4 w-4") %>
+        Remover
+      </button>
+    </div>
+  </div>
+
+  <div class="grid gap-3 lg:grid-cols-8">
+    <%= item_form.hidden_field :description, data: { cargo_items_target: "description" } %>
+    <div>
+      <%= item_form.label :package_label, "Embalagem", class: "mb-1 block text-xs text-[#94A3B8]" %>
+      <%= item_form.text_field :package_label, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "packageLabel", action: "cargo-items#preview" } %>
+    </div>
+    <div>
+      <%= item_form.label :units_per_package, "Un./emb.", class: "mb-1 block text-xs text-[#94A3B8]" %>
+      <%= item_form.number_field :units_per_package, min: 1, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "unitsPerPackage", action: "cargo-items#preview" } %>
+    </div>
+    <div>
+      <%= item_form.label :packages_per_pallet, "Emb./palete", class: "mb-1 block text-xs text-[#94A3B8]" %>
+      <%= item_form.number_field :packages_per_pallet, min: 1, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "packagesPerPallet", action: "cargo-items#preview" } %>
+    </div>
+    <div>
+      <%= item_form.label :length_cm, "Comp. cm", class: "mb-1 block text-xs text-[#94A3B8]" %>
+      <%= item_form.number_field :length_cm, step: 0.01, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "length", action: "cargo-items#preview" } %>
+    </div>
+    <div>
+      <%= item_form.label :width_cm, "Larg. cm", class: "mb-1 block text-xs text-[#94A3B8]" %>
+      <%= item_form.number_field :width_cm, step: 0.01, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "width", action: "cargo-items#preview" } %>
+    </div>
+    <div>
+      <%= item_form.label :height_cm, "Alt. cm", class: "mb-1 block text-xs text-[#94A3B8]" %>
+      <%= item_form.number_field :height_cm, step: 0.01, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "height", action: "cargo-items#preview" } %>
+    </div>
+    <div>
+      <%= item_form.label :weight_kg, "Peso kg", class: "mb-1 block text-xs text-[#94A3B8]" %>
+      <%= item_form.number_field :weight_kg, step: 0.001, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "weight", action: "cargo-items#preview" } %>
+    </div>
+    <label class="flex items-center gap-2 rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-sm text-[#F8FAFC]">
+      <%= item_form.check_box :stackable, data: { cargo_items_target: "stackableCheckbox", action: "cargo-items#manualFlagsChanged" } %>
+      Pode empilhar?
+    </label>
+    <div>
+      <%= item_form.label :max_stack_layers, "Camadas", class: "mb-1 block text-xs text-[#94A3B8]" %>
+      <%= item_form.number_field :max_stack_layers, min: 1, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]", data: { cargo_items_target: "maxStackLayersInput", action: "cargo-items#manualFlagsChanged" } %>
+    </div>
+    <label class="flex items-center gap-2 rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-sm text-[#F8FAFC]">
+      <%= item_form.check_box :fragile, data: { cargo_items_target: "fragileCheckbox", action: "cargo-items#manualFlagsChanged" } %>
+      Frágil?
+    </label>
+    <label class="flex items-center gap-2 rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-sm text-[#F8FAFC]">
+      <%= item_form.check_box :can_rotate, data: { cargo_items_target: "canRotateCheckbox", action: "cargo-items#manualFlagsChanged" } %>
+      Pode girar?
+    </label>
+    <label class="flex items-center gap-2 rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-sm text-[#F8FAFC]">
+      <%= item_form.check_box :hazardous, data: { cargo_items_target: "hazardousCheckbox", action: "cargo-items#manualFlagsChanged" } %>
+      Perigoso?
+    </label>
+    <div>
+      <%= item_form.label :loading_priority, "Prioridade", class: "mb-1 block text-xs text-[#94A3B8]" %>
+      <%= item_form.select :loading_priority, [["Carregar primeiro", "carregar_primeiro"], ["Normal", "normal"], ["Carregar por último", "carregar_por_ultimo"]], {}, class: "w-full rounded-md border border-[#334155] bg-[#111827] px-3 py-2 text-[#F8FAFC]" %>
+    </div>
+  </div>
+
+  <div class="rounded-lg border border-[#334155] bg-[#111827] p-3 text-sm text-[#94A3B8]" data-cargo-items-target="preview">
+    Selecione um produto para ver a prévia de unidades, embalagens, paletes, peso e volume.
+  </div>
+</div>

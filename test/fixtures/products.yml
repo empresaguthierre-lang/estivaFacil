@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company: one
+  package_box: one
+  internal_code: MyString
+  ref_code: MyString
+  imp_code: MyString
+  name: MyString
+  description: MyText
+  unit: MyString
+  weight_per_unit_kg: 9.99
+  stowage_factor: 9.99
+  packages_per_pallet: 1
+  active: false
+
+two:
+  company: two
+  package_box: two
+  internal_code: MyString
+  ref_code: MyString
+  imp_code: MyString
+  name: MyString
+  description: MyText
+  unit: MyString
+  weight_per_unit_kg: 9.99
+  stowage_factor: 9.99
+  packages_per_pallet: 1
+  active: false

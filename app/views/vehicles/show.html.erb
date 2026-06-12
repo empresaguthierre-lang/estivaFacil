@@ -1,0 +1,36 @@
+<section class="grid gap-6">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2">
+        <% if @vehicle.active? %>
+          <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400 ring-1 ring-emerald-500/20">Ativo</span>
+        <% else %>
+          <span class="inline-flex items-center gap-1 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-semibold text-red-400 ring-1 ring-red-500/20">Inativo</span>
+        <% end %>
+      </div>
+      <h1 class="mt-1 text-2xl font-bold tracking-tight text-[#F8FAFC]"><%= @vehicle.name %></h1>
+    </div>
+    <div class="flex gap-3">
+      <%= link_to edit_vehicle_path(@vehicle), class: "inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 px-4 py-2 text-sm font-semibold text-[#06131E] shadow-md shadow-emerald-950/20 transition-all hover:from-emerald-500 hover:to-teal-400 hover:scale-[1.02]" do %>
+        <%= lucide_icon(:edit, css: "h-4 w-4") %>
+        Editar
+      <% end %>
+      <%= link_to vehicles_path, class: "rounded-md border border-[#1E294B] bg-[#131B2E] px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-[#1E294B] hover:text-white" do %>
+        Voltar
+      <% end %>
+    </div>
+  </div>
+
+  <dl class="grid gap-4 rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-5 md:grid-cols-4 shadow-xl shadow-slate-950/20 backdrop-blur-md">
+    <div><dt class="text-xs text-[#94A3B8]">Tipo</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @vehicle.kind %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Peso máximo</dt><dd class="mt-1 font-semibold text-[#F8FAFC] font-mono"><%= number_with_precision(@vehicle.max_weight_kg, precision: 2) %> kg</dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Volume máximo</dt><dd class="mt-1 font-semibold text-teal-400 font-mono"><%= number_with_precision(@vehicle.max_volume_m3, precision: 3) %> m³</dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Dimensões brutas</dt><dd class="mt-1 font-semibold text-[#F8FAFC] font-mono"><%= @vehicle.length_cm %> x <%= @vehicle.width_cm %> x <%= @vehicle.height_cm %> cm</dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Capacidade de paletes</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @vehicle.pallet_capacity.presence || "-" %> un</dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Carroceria</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @vehicle.body_type.presence || "-" %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Dimensões úteis</dt><dd class="mt-1 font-semibold text-[#F8FAFC] font-mono"><%= @vehicle.usable_length %> x <%= @vehicle.usable_width %> x <%= @vehicle.usable_height %> cm</dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Carga perigosa</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @vehicle.allows_hazardous? ? "Permitida" : "Restrita" %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Refrigerado</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @vehicle.refrigerated? ? "Sim" : "Não" %></dd></div>
+    <div class="md:col-span-3"><dt class="text-xs text-[#94A3B8]">Observações</dt><dd class="mt-1 font-medium text-[#94A3B8]"><%= @vehicle.notes.presence || "-" %></dd></div>
+  </dl>
+</section>

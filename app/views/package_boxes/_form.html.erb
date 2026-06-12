@@ -1,0 +1,48 @@
+<%= form_with model: package_box, class: "grid gap-5" do |form| %>
+  <% if package_box.errors.any? %>
+    <div class="rounded border border-red-700 bg-red-950 p-4 text-red-100">
+      <p class="font-semibold">Revise o cadastro:</p>
+      <ul class="mt-2 list-disc pl-5">
+        <% package_box.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid gap-4 rounded border border-zinc-800 bg-zinc-900 p-5 md:grid-cols-3">
+    <div class="md:col-span-3">
+      <%= form.label :name, "Nome", class: "mb-1 block text-sm text-zinc-300" %>
+      <%= form.text_field :name, required: true, class: "w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :length_cm, "Comprimento cm", class: "mb-1 block text-sm text-zinc-300" %>
+      <%= form.number_field :length_cm, step: 0.01, required: true, class: "w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :width_cm, "Largura cm", class: "mb-1 block text-sm text-zinc-300" %>
+      <%= form.number_field :width_cm, step: 0.01, required: true, class: "w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :height_cm, "Altura cm", class: "mb-1 block text-sm text-zinc-300" %>
+      <%= form.number_field :height_cm, step: 0.01, required: true, class: "w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :units_per_package, "Unidades por caixa", class: "mb-1 block text-sm text-zinc-300" %>
+      <%= form.number_field :units_per_package, min: 1, required: true, class: "w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :package_weight_kg, "Peso da embalagem kg", class: "mb-1 block text-sm text-zinc-300" %>
+      <%= form.number_field :package_weight_kg, step: 0.01, required: true, class: "w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2" %>
+    </div>
+    <label class="flex items-center gap-2 text-sm text-zinc-300">
+      <%= form.check_box :active %>
+      Ativa
+    </label>
+  </div>
+
+  <div class="flex gap-3">
+    <%= form.submit "Salvar embalagem", class: "rounded bg-emerald-500 px-4 py-2 font-semibold text-zinc-950 hover:bg-emerald-400" %>
+    <%= link_to "Cancelar", package_boxes_path, class: "rounded bg-zinc-800 px-4 py-2 text-white hover:bg-zinc-700" %>
+  </div>
+<% end %>

@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company: one
+  user: one
+  customer_name: MyString
+  origin: MyString
+  destination: MyString
+  status: 1
+  total_weight_kg: 9.99
+  total_volume_m3: 9.99
+  recommended_vehicle: one
+
+two:
+  company: two
+  user: two
+  customer_name: MyString
+  origin: MyString
+  destination: MyString
+  status: 1
+  total_weight_kg: 9.99
+  total_volume_m3: 9.99
+  recommended_vehicle: two

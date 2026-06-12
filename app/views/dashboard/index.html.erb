@@ -1,0 +1,159 @@
+<section class="grid gap-8">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="inline-flex items-center gap-2 text-sm font-medium text-emerald-400">
+        <%= lucide_icon(:activity, css: "h-4 w-4 animate-pulse") %>
+        Operação logística ativa
+      </p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight text-[#F8FAFC] bg-clip-text">Painel da <%= current_company.name %></h1>
+      <p class="mt-1 max-w-2xl text-sm leading-6 text-[#94A3B8]">Acompanhe cubagens, cadastros e capacidade operacional em um painel direto para a rotina da equipe.</p>
+    </div>
+
+    <%= link_to new_cargo_path, class: "inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 px-4 py-2.5 font-semibold text-[#06131E] shadow-lg shadow-emerald-950/40 transition-all duration-200 hover:from-emerald-500 hover:to-teal-400 hover:shadow-emerald-500/20 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#10B981]/50 focus:ring-offset-2 focus:ring-offset-[#090D16]" do %>
+      <%= lucide_icon(:plus, css: "h-4 w-4") %>
+      Nova cubagem
+    <% end %>
+  </div>
+
+  <% kpis = [
+    { label: "Cargas cadastradas", value: @cargos_count, description: "Cubagens criadas pela empresa", icon: :clipboard, path: cargos_path, accent: "text-emerald-400 bg-emerald-500/10 ring-emerald-500/20" },
+    { label: "Produtos ativos", value: @products_count, description: "Itens disponíveis para seleção", icon: :package, path: products_path, accent: "text-blue-400 bg-blue-500/10 ring-blue-500/20" },
+    { label: "Veículos ativos", value: @vehicles_count, description: "Frota apta para recomendação", icon: :truck, path: vehicles_path, accent: "text-amber-400 bg-amber-500/10 ring-amber-500/20" },
+    { label: "Volume total", value: "#{number_with_precision(@cargo_volume, precision: 3)} m³", description: "Cubagem acumulada calculada", icon: :boxes, path: cargos_path, accent: "text-teal-400 bg-teal-500/10 ring-teal-500/20" }
+  ] %>
+
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <% kpis.each do |kpi| %>
+      <%= link_to kpi[:path], class: "group rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-5 shadow-xl shadow-slate-950/20 transition-all duration-200 hover:-translate-y-1 hover:border-emerald-500/30 hover:bg-[#131B2E] hover:shadow-lg hover:shadow-emerald-950/10 focus:outline-none focus:ring-2 focus:ring-emerald-500/30" do %>
+        <div class="flex items-start justify-between gap-4">
+          <span class="inline-flex h-11 w-11 items-center justify-center rounded-lg ring-1 <%= kpi[:accent] %> transition group-hover:scale-105">
+            <%= lucide_icon(kpi[:icon], css: "h-5 w-5") %>
+          </span>
+          <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 opacity-0 group-hover:opacity-100 transition-all duration-200">
+            Ver detalhes
+            <%= lucide_icon(:arrow_right, css: "h-3.5 w-3.5") %>
+          </span>
+        </div>
+        <p class="mt-5 text-3xl font-bold tracking-tight text-[#F8FAFC] group-hover:text-emerald-300 transition-colors"><%= kpi[:value] %></p>
+        <p class="mt-1 text-sm font-medium text-[#F8FAFC]"><%= kpi[:label] %></p>
+        <p class="mt-2 text-xs leading-5 text-[#94A3B8]"><%= kpi[:description] %></p>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-[1fr_360px]">
+    <div class="overflow-hidden rounded-lg border border-[#1E294B] bg-[#131B2E]/40 shadow-xl shadow-slate-950/20 backdrop-blur-md">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#1E294B] px-5 py-4">
+        <div>
+          <h2 class="text-lg font-semibold text-[#F8FAFC]">Últimas cargas</h2>
+          <p class="mt-1 text-xs text-[#94A3B8]">Ações rápidas para visualizar ou editar cubagens recentes.</p>
+        </div>
+        <%= link_to "Ver todas", cargos_path, class: "text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors focus:outline-none focus:ring-2 focus:ring-[#10B981]/40" %>
+      </div>
+
+      <% if @cargos.any? %>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[760px] text-left text-sm">
+            <thead class="bg-[#090D16]/50 text-xs uppercase text-[#94A3B8] border-b border-[#1E294B]">
+              <tr>
+                <th class="px-5 py-3 font-semibold">Cliente</th>
+                <th class="px-5 py-3 font-semibold">Rota</th>
+                <th class="px-5 py-3 font-semibold">Peso</th>
+                <th class="px-5 py-3 font-semibold">Volume</th>
+                <th class="px-5 py-3 font-semibold">Veículo</th>
+                <th class="px-5 py-3 text-right font-semibold">Ações</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#1E294B]/60">
+              <% @cargos.each do |cargo| %>
+                <tr class="transition-colors duration-150 hover:bg-[#1E294B]/20">
+                  <td class="px-5 py-4">
+                    <%= link_to cargo.customer_name, cargo, class: "font-semibold text-[#F8FAFC] hover:text-emerald-400 transition-colors" %>
+                  </td>
+                  <td class="px-5 py-4 text-[#94A3B8]">
+                    <div class="flex items-center gap-1.5">
+                      <%= lucide_icon(:route, css: "h-3.5 w-3.5 text-slate-500") %>
+                      <span><%= cargo.origin %> para <%= cargo.destination %></span>
+                    </div>
+                  </td>
+                  <td class="px-5 py-4 text-[#F8FAFC] font-medium"><%= number_with_precision(cargo.total_weight_kg, precision: 2) %> kg</td>
+                  <td class="px-5 py-4 text-[#F8FAFC] font-medium"><%= number_with_precision(cargo.total_volume_m3, precision: 3) %> m³</td>
+                  <td class="px-5 py-4">
+                    <% if cargo.recommended_vehicle.present? %>
+                      <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-400 ring-1 ring-emerald-500/20">
+                        <%= lucide_icon(:truck, css: "h-3 w-3") %>
+                        <%= cargo.recommended_vehicle.name %>
+                      </span>
+                    <% else %>
+                      <span class="text-slate-500 text-xs italic">Sem sugestão</span>
+                    <% end %>
+                  </td>
+                  <td class="px-5 py-4">
+                    <div class="flex justify-end gap-2">
+                      <%= link_to cargo, class: "inline-flex items-center gap-1.5 rounded-md border border-[#1E294B] bg-[#090D16] px-3 py-1.5 text-xs font-semibold text-[#F8FAFC] transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30" do %>
+                        <%= lucide_icon(:eye, css: "h-3.5 w-3.5") %>
+                        Visualizar
+                      <% end %>
+                      <%= link_to edit_cargo_path(cargo), class: "inline-flex items-center gap-1.5 rounded-md border border-[#1E294B] bg-[#090D16] px-3 py-1.5 text-xs font-semibold text-[#F8FAFC] transition-all hover:border-emerald-500/40 hover:bg-emerald-500/10 hover:text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30" do %>
+                        <%= lucide_icon(:edit, css: "h-3.5 w-3.5") %>
+                        Editar
+                      <% end %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="px-5 py-10 text-center">
+          <p class="text-sm text-[#94A3B8]">Nenhuma carga cadastrada ainda.</p>
+          <%= link_to "Criar primeira cubagem", new_cargo_path, class: "mt-4 inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 px-4 py-2 font-semibold text-[#06131E] hover:from-emerald-500 hover:to-teal-400" %>
+        </div>
+      <% end %>
+    </div>
+
+    <aside class="grid content-start gap-4">
+      <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-5 shadow-xl shadow-slate-950/20 backdrop-blur-md">
+        <h2 class="text-lg font-semibold text-[#F8FAFC]">Atalhos rápidos</h2>
+        <div class="mt-4 grid gap-3">
+          <%= link_to new_cargo_path, class: "group flex items-center justify-between rounded-lg border border-[#1E294B] bg-[#090D16] p-4 transition-all duration-200 hover:border-emerald-500/50 hover:bg-[#131B2E]/80" do %>
+            <span class="inline-flex items-center gap-3 font-semibold text-[#F8FAFC]"><%= lucide_icon(:calculator, css: "h-5 w-5 text-emerald-400") %>Calcular cubagem</span>
+            <%= lucide_icon(:arrow_right, css: "h-4 w-4 text-[#94A3B8] transition-all group-hover:translate-x-1 group-hover:text-emerald-400") %>
+          <% end %>
+          <%= link_to new_product_path, class: "group flex items-center justify-between rounded-lg border border-[#1E294B] bg-[#090D16] p-4 transition-all duration-200 hover:border-blue-500/50 hover:bg-[#131B2E]/80" do %>
+            <span class="inline-flex items-center gap-3 font-semibold text-[#F8FAFC]"><%= lucide_icon(:package, css: "h-5 w-5 text-blue-400") %>Cadastrar produto</span>
+            <%= lucide_icon(:arrow_right, css: "h-4 w-4 text-[#94A3B8] transition-all group-hover:translate-x-1 group-hover:text-blue-400") %>
+          <% end %>
+          <%= link_to new_package_box_path, class: "group flex items-center justify-between rounded-lg border border-[#1E294B] bg-[#090D16] p-4 transition-all duration-200 hover:border-teal-500/50 hover:bg-[#131B2E]/80" do %>
+            <span class="inline-flex items-center gap-3 font-semibold text-[#F8FAFC]"><%= lucide_icon(:archive, css: "h-5 w-5 text-teal-400") %>Cadastrar embalagem</span>
+            <%= lucide_icon(:arrow_right, css: "h-4 w-4 text-[#94A3B8] transition-all group-hover:translate-x-1 group-hover:text-teal-400") %>
+          <% end %>
+          <%= link_to new_vehicle_path, class: "group flex items-center justify-between rounded-lg border border-[#1E294B] bg-[#090D16] p-4 transition-all duration-200 hover:border-amber-500/50 hover:bg-[#131B2E]/80" do %>
+            <span class="inline-flex items-center gap-3 font-semibold text-[#F8FAFC]"><%= lucide_icon(:truck, css: "h-5 w-5 text-amber-400") %>Cadastrar veículo</span>
+            <%= lucide_icon(:arrow_right, css: "h-4 w-4 text-[#94A3B8] transition-all group-hover:translate-x-1 group-hover:text-amber-400") %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-5 shadow-xl shadow-slate-950/20 backdrop-blur-md">
+        <h2 class="text-lg font-semibold text-[#F8FAFC]">Resumo operacional</h2>
+        <dl class="mt-4 grid gap-3 text-sm">
+          <div class="flex items-center justify-between border-b border-[#1E294B]/60 pb-3">
+            <dt class="text-[#94A3B8]">Caixas calculadas</dt>
+            <dd class="font-semibold text-[#F8FAFC]"><%= @total_packages %></dd>
+          </div>
+          <div class="flex items-center justify-between border-b border-[#1E294B]/60 pb-3">
+            <dt class="text-[#94A3B8]">Paletes calculados</dt>
+            <dd class="font-semibold text-[#F8FAFC]"><%= @total_pallets %></dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-[#94A3B8]">Peso total</dt>
+            <dd class="font-semibold text-[#F8FAFC]"><%= number_with_precision(@cargo_weight, precision: 2) %> kg</dd>
+          </div>
+        </dl>
+      </div>
+    </aside>
+  </div>
+</section>
+

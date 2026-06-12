@@ -1,0 +1,47 @@
+<section class="grid gap-6">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-400">
+        <%= lucide_icon(:archive, css: "h-3.5 w-3.5") %>
+        Módulo de Cadastros
+      </p>
+      <h1 class="mt-1 text-2xl font-bold tracking-tight text-[#F8FAFC]">Embalagens</h1>
+      <p class="mt-1 text-xs text-[#94A3B8]">Cadastre caixas padrão, dimensões e limites de peso das embalagens.</p>
+    </div>
+    <%= link_to new_package_box_path, class: "inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 px-4 py-2 font-semibold text-[#06131E] shadow-md shadow-emerald-950/20 transition-all hover:from-emerald-500 hover:to-teal-400 hover:scale-[1.02]" do %>
+      <%= lucide_icon(:plus, css: "h-4 w-4") %>
+      Nova embalagem
+    <% end %>
+  </div>
+
+  <div class="overflow-hidden rounded-lg border border-[#1E294B] bg-[#131B2E]/40 backdrop-blur-md">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-[#090D16]/50 text-xs uppercase text-[#94A3B8] border-b border-[#1E294B]">
+        <tr>
+          <th class="px-5 py-3 font-semibold">Nome</th>
+          <th class="px-5 py-3 font-semibold">Dimensões</th>
+          <th class="px-5 py-3 font-semibold">Unidades por caixa</th>
+          <th class="px-5 py-3 font-semibold">Peso da embalagem</th>
+          <th class="px-5 py-3 font-semibold">Status</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[#1E294B]/60">
+        <% @package_boxes.each do |box| %>
+          <tr class="transition-colors duration-150 hover:bg-[#1E294B]/20">
+            <td class="px-5 py-4"><%= link_to box.name, box, class: "font-semibold text-[#F8FAFC] hover:text-emerald-400 transition-colors" %></td>
+            <td class="px-5 py-4 text-slate-300 font-mono text-xs"><%= box.length_cm %> x <%= box.width_cm %> x <%= box.height_cm %> cm</td>
+            <td class="px-5 py-4 text-[#94A3B8] font-medium"><%= box.units_per_package %> un</td>
+            <td class="px-5 py-4 text-[#F8FAFC] font-medium"><%= number_with_precision(box.package_weight_kg, precision: 2) %> kg</td>
+            <td class="px-5 py-4">
+              <% if box.active? %>
+                <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-2 py-0.5 text-2xs font-semibold text-emerald-400 ring-1 ring-emerald-500/20">Ativa</span>
+              <% else %>
+                <span class="inline-flex items-center rounded-full bg-red-500/10 px-2 py-0.5 text-2xs font-semibold text-red-400 ring-1 ring-red-500/20">Inativa</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

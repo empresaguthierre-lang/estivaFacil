@@ -1,0 +1,73 @@
+<% product_options = products.map { |product| [product.search_label, product.id, { data: { product: product.product_payload.to_json } }] } %>
+
+<% if products.empty? %>
+  <div class="rounded-lg border border-[#F59E0B]/40 bg-[#F59E0B]/10 p-4 text-sm text-amber-100">
+    Cadastre pelo menos um produto antes de calcular uma cubagem.
+    <%= link_to "Cadastrar produto", new_product_path, class: "ml-2 font-semibold text-amber-200 underline decoration-amber-300/60 underline-offset-4 hover:text-amber-100" %>
+  </div>
+<% end %>
+
+<%= form_with model: cargo, class: "grid gap-5" do |form| %>
+  <% if cargo.errors.any? %>
+    <div class="rounded-lg border border-[#EF4444]/50 bg-[#EF4444]/10 p-4 text-red-100">
+      <p class="font-semibold">Não foi possível salvar:</p>
+      <ul class="mt-2 list-disc pl-5 text-sm">
+        <% cargo.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid gap-4 rounded-lg border border-[#334155] bg-[#111827] p-5 shadow-xl shadow-slate-950/20 md:grid-cols-3">
+    <div>
+      <%= form.label :customer_name, "Cliente", class: "mb-1 block text-sm font-medium text-[#F8FAFC]" %>
+      <%= form.text_field :customer_name, required: true, class: "w-full rounded-md border border-[#334155] bg-[#0F172A] px-3 py-2 text-[#F8FAFC] outline-none transition placeholder:text-[#94A3B8] focus:border-[#10B981] focus:ring-2 focus:ring-[#10B981]/30" %>
+    </div>
+    <div>
+      <%= form.label :origin, "Origem", class: "mb-1 block text-sm font-medium text-[#F8FAFC]" %>
+      <%= form.text_field :origin, required: true, class: "w-full rounded-md border border-[#334155] bg-[#0F172A] px-3 py-2 text-[#F8FAFC] outline-none transition placeholder:text-[#94A3B8] focus:border-[#10B981] focus:ring-2 focus:ring-[#10B981]/30" %>
+    </div>
+    <div>
+      <%= form.label :destination, "Destino", class: "mb-1 block text-sm font-medium text-[#F8FAFC]" %>
+      <%= form.text_field :destination, required: true, class: "w-full rounded-md border border-[#334155] bg-[#0F172A] px-3 py-2 text-[#F8FAFC] outline-none transition placeholder:text-[#94A3B8] focus:border-[#10B981] focus:ring-2 focus:ring-[#10B981]/30" %>
+    </div>
+    <div class="md:col-span-3">
+      <%= form.label :invoice, "Arquivo da nota ou pedido", class: "mb-1 block text-sm font-medium text-[#F8FAFC]" %>
+      <%= form.file_field :invoice, class: "w-full rounded-md border border-dashed border-[#334155] bg-[#0F172A] px-3 py-2 text-sm text-[#94A3B8] file:mr-4 file:rounded-md file:border-0 file:bg-[#1F2937] file:px-3 file:py-2 file:text-sm file:font-semibold file:text-[#F8FAFC] hover:file:bg-[#334155] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30" %>
+    </div>
+  </div>
+
+  <div class="grid gap-4 rounded-lg border border-[#334155] bg-[#111827] p-5 shadow-xl shadow-slate-950/20" data-controller="cargo-items">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h2 class="text-lg font-semibold text-[#F8FAFC]">Itens da cubagem</h2>
+        <p class="mt-1 text-sm text-[#94A3B8]">Busque por ID, REF, IMP ou produto e informe a quantidade.</p>
+      </div>
+      <button type="button" class="inline-flex items-center gap-2 rounded-md border border-[#334155] bg-[#1F2937] px-4 py-2 text-sm font-semibold text-[#F8FAFC] transition hover:border-[#10B981]/60 hover:bg-[#10B981]/10 hover:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-[#10B981]/40" data-action="cargo-items#add">
+        <%= lucide_icon(:plus, css: "h-4 w-4") %>
+        Adicionar item
+      </button>
+    </div>
+
+    <div class="grid gap-4" data-cargo-items-target="list">
+      <%= form.fields_for :cargo_items do |item_form| %>
+        <%= render "cargo_item_fields", item_form: item_form, product_options: product_options %>
+      <% end %>
+    </div>
+
+    <template data-cargo-items-target="template">
+      <%= form.fields_for :cargo_items, CargoItem.new, child_index: "NEW_RECORD" do |item_form| %>
+        <%= render "cargo_item_fields", item_form: item_form, product_options: product_options %>
+      <% end %>
+    </template>
+  </div>
+
+  <div class="flex flex-wrap gap-3">
+    <%= form.button type: :submit, class: "inline-flex items-center gap-2 rounded-md bg-[#10B981] px-4 py-2 font-semibold text-[#06131E] shadow-lg shadow-emerald-950/30 transition hover:bg-[#059669] focus:outline-none focus:ring-2 focus:ring-[#10B981]/50 focus:ring-offset-2 focus:ring-offset-[#0F172A]" do %>
+      <%= lucide_icon(:calculator, css: "h-4 w-4") %>
+      Calcular cubagem
+    <% end %>
+    <%= link_to "Cancelar", cargos_path, class: "rounded-md border border-[#334155] bg-[#1F2937] px-4 py-2 font-semibold text-[#F8FAFC] transition hover:bg-[#334155] focus:outline-none focus:ring-2 focus:ring-[#10B981]/40" %>
+  </div>
+<% end %>

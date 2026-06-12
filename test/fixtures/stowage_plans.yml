@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company: one
+  cargo: one
+  vehicle: one
+  status: 1
+  score: 9.99
+  notes: MyText
+
+two:
+  company: two
+  cargo: two
+  vehicle: two
+  status: 1
+  score: 9.99
+  notes: MyText

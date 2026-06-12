@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "EstivaFácil" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="EstivaFácil">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen bg-[#090D16] text-[#F8FAFC] antialiased">
+    <header class="sticky top-0 z-40 border-b border-[#1E294B] bg-[#090D16]/80 shadow-lg shadow-slate-950/40 backdrop-blur-md">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-4">
+        <%= link_to root_path, class: "group inline-flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:ring-offset-2 focus:ring-offset-[#090D16]" do %>
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 text-[#06131E] shadow-md shadow-emerald-500/20 transition group-hover:scale-105">
+            <%= lucide_icon(:warehouse, css: "h-5 w-5") %>
+          </span>
+          <span>
+            <span class="block text-lg font-semibold tracking-tight text-[#F8FAFC] group-hover:text-emerald-400 transition-colors">EstivaFácil</span>
+            <span class="block text-xs font-medium text-[#94A3B8]">Cubagem e estiva B2B</span>
+          </span>
+        <% end %>
+
+        <% if current_user %>
+          <nav class="flex flex-wrap items-center gap-2">
+            <%= nav_link_to "Painel", root_path, icon: :layout_dashboard %>
+            <%= nav_link_to "Cargas", cargos_path, icon: :clipboard %>
+            <%= nav_link_to "Produtos", products_path, icon: :package %>
+            <%= nav_link_to "Embalagens", package_boxes_path, icon: :archive %>
+            <%= nav_link_to "Veículos", vehicles_path, icon: :truck %>
+          </nav>
+
+          <div class="flex items-center gap-3">
+            <div class="hidden text-right sm:block">
+              <p class="text-sm font-semibold text-[#F8FAFC]"><%= current_company.name %></p>
+              <p class="text-xs text-[#94A3B8]"><%= current_user.name.presence || current_user.email %></p>
+            </div>
+            <%= button_to session_path, method: :delete, class: "inline-flex items-center gap-2 rounded-md border border-[#1E294B] bg-[#131B2E] px-3 py-2 text-sm font-semibold text-[#F8FAFC] transition-all hover:border-[#EF4444]/40 hover:bg-[#EF4444]/10 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-[#EF4444]/30" do %>
+              <%= lucide_icon(:log_out, css: "h-4 w-4") %>
+              Sair
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-5 py-8">
+      <% if notice %>
+        <p class="mb-5 rounded-lg border border-[#10B981]/40 bg-[#10B981]/10 px-4 py-3 text-sm font-medium text-emerald-100"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="mb-5 rounded-lg border border-[#EF4444]/50 bg-[#EF4444]/10 px-4 py-3 text-sm font-medium text-red-100"><%= alert %></p>
+      <% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

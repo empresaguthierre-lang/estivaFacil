@@ -1,0 +1,70 @@
+pt-BR:
+  hello: "Olá"
+  activerecord:
+    models:
+      company: "Empresa"
+      user: "Usuário"
+      vehicle: "Veículo"
+      product: "Produto"
+      package_box: "Embalagem"
+      cargo: "Carga"
+      cargo_item: "Item da carga"
+      stowage_plan: "Plano de estiva"
+      subscription: "Assinatura"
+    attributes:
+      company:
+        name: "Nome"
+        document: "CNPJ"
+        plan: "Plano"
+        status: "Status"
+      user:
+        name: "Nome"
+        email: "E-mail"
+        password: "Senha"
+        role: "Perfil"
+      cargo:
+        customer_name: "Cliente"
+        origin: "Origem"
+        destination: "Destino"
+        total_packages: "Total de caixas"
+        total_pallets: "Total de paletes"
+        total_weight_kg: "Peso total"
+        total_volume_m3: "Volume total"
+      cargo_item:
+        product: "Produto"
+        description: "Descrição"
+        quantity: "Quantidade"
+        length_cm: "Comprimento"
+        width_cm: "Largura"
+        height_cm: "Altura"
+        weight_kg: "Peso"
+      product:
+        internal_code: "ID"
+        ref_code: "REF"
+        imp_code: "IMP"
+        name: "Produto"
+        description: "Descrição"
+        unit: "Unidade"
+        weight_per_unit_kg: "Peso por unidade"
+        stowage_factor: "Fator de estiva"
+        package_box: "Embalagem"
+        packages_per_pallet: "Caixas por palete"
+        active: "Ativo"
+      package_box:
+        name: "Nome"
+        length_cm: "Comprimento"
+        width_cm: "Largura"
+        height_cm: "Altura"
+        units_per_package: "Unidades por caixa"
+        package_weight_kg: "Peso da embalagem"
+        active: "Ativa"
+    errors:
+      messages:
+        blank: "não pode ficar em branco"
+        taken: "já está em uso"
+        greater_than: "deve ser maior que %{count}"
+        greater_than_or_equal_to: "deve ser maior ou igual a %{count}"
+        less_than_or_equal_to: "deve ser menor ou igual a %{count}"
+        not_a_number: "não é um número"
+  errors:
+    format: "%{attribute} %{message}"

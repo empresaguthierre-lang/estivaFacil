@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company: one
+  name: MyString
+  kind: MyString
+  max_weight_kg: 9.99
+  max_volume_m3: 9.99
+  length_cm: 9.99
+  width_cm: 9.99
+  height_cm: 9.99
+  active: false
+
+two:
+  company: two
+  name: MyString
+  kind: MyString
+  max_weight_kg: 9.99
+  max_volume_m3: 9.99
+  length_cm: 9.99
+  width_cm: 9.99
+  height_cm: 9.99
+  active: false

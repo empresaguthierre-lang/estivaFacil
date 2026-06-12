@@ -1,0 +1,61 @@
+<section class="grid gap-6">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2">
+        <% if @product.active? %>
+          <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400 ring-1 ring-emerald-500/20">Ativo</span>
+        <% else %>
+          <span class="inline-flex items-center gap-1 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-semibold text-red-400 ring-1 ring-red-500/20">Inativo</span>
+        <% end %>
+        <span class="text-xs text-slate-500 font-mono">SKU: <%= @product.sku.presence || "-" %></span>
+      </div>
+      <h1 class="mt-1 text-2xl font-bold tracking-tight text-[#F8FAFC]"><%= @product.name %></h1>
+      <p class="mt-1 text-xs text-[#94A3B8]"><%= @product.description %></p>
+    </div>
+    <div class="flex gap-3">
+      <%= link_to edit_product_path(@product), class: "inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 px-4 py-2 text-sm font-semibold text-[#06131E] shadow-md shadow-emerald-950/20 transition-all hover:from-emerald-500 hover:to-teal-400 hover:scale-[1.02]" do %>
+        <%= lucide_icon(:edit, css: "h-4 w-4") %>
+        Editar
+      <% end %>
+      <%= link_to products_path, class: "rounded-md border border-[#1E294B] bg-[#131B2E] px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-[#1E294B] hover:text-white" do %>
+        Voltar
+      <% end %>
+    </div>
+  </div>
+
+  <dl class="grid gap-4 rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-5 md:grid-cols-4 shadow-xl shadow-slate-950/20 backdrop-blur-md">
+    <div><dt class="text-xs text-[#94A3B8]">ID interno</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @product.commercial_code.presence || "-" %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">SKU</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @product.sku.presence || "-" %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Referência</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @product.reference_code.presence || @product.ref_code.presence || "-" %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Método padrão</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @product.default_count_method.humanize %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Embalagem</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @product.package_name.presence || "-" %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Unidades por embalagem</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @product.units_per_package.presence || "-" %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Embalagens por palete</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @product.packages_per_pallet.presence || "-" %></dd></div>
+    <div><dt class="text-xs text-[#94A3B8]">Camadas máximas</dt><dd class="mt-1 font-semibold text-[#F8FAFC]"><%= @product.max_stack_layers %></dd></div>
+  </dl>
+
+  <div class="grid gap-4 md:grid-cols-3">
+    <% [ [ "Unidade", @product.unit_weight_kg, @product.unit_length_cm, @product.unit_width_cm, @product.unit_height_cm ],
+         [ "Embalagem (Caixa)", @product.package_weight_kg, @product.package_length_cm, @product.package_width_cm, @product.package_height_cm ],
+         [ "Palete", @product.pallet_weight_kg, @product.pallet_length_cm, @product.pallet_width_cm, @product.pallet_height_cm ] ].each do |label, weight, length, width, height| %>
+      <div class="rounded-lg border border-[#1E294B] bg-[#131B2E]/40 p-5 shadow-md shadow-slate-950/10 hover:border-emerald-500/20 transition-all duration-200">
+        <h2 class="font-semibold text-emerald-400"><%= label %></h2>
+        <div class="mt-3 grid gap-1.5 text-sm">
+          <div class="flex justify-between border-b border-[#1E294B]/40 pb-1.5"><span class="text-[#94A3B8]">Peso:</span><span class="font-medium text-[#F8FAFC]"><%= weight.present? ? "#{number_with_precision(weight, precision: 3)} kg" : "-" %></span></div>
+          <div class="flex justify-between pt-0.5"><span class="text-[#94A3B8]">Medidas:</span><span class="font-medium text-[#F8FAFC]"><%= [length, width, height].all?(&:present?) ? "#{length} x #{width} x #{height} cm" : "-" %></span></div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flex flex-wrap gap-2">
+    <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 ring-1 ring-emerald-500/20"><%= @product.stackable? ? "Empilhável" : "Não empilhável" %></span>
+    <span class="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-400 ring-1 ring-blue-500/20"><%= @product.can_rotate? ? "Permite rotação" : "Não permite rotação" %></span>
+    <% if @product.fragile? %>
+      <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-400 ring-1 ring-amber-500/20">Frágil</span>
+    <% end %>
+    <% if @product.hazardous? %>
+      <span class="rounded-full bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/20">Carga Perigosa (Hazardous)</span>
+    <% end %>
+  </div>
+</section>

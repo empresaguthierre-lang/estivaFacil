@@ -1,0 +1,72 @@
+<section class="grid gap-6">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
+        <%= lucide_icon(:clipboard, css: "h-3.5 w-3.5") %>
+        Módulo Operacional
+      </p>
+      <h1 class="mt-1 text-2xl font-bold tracking-tight text-[#F8FAFC]">Cargas</h1>
+      <p class="mt-1 text-xs text-[#94A3B8]">Consulte cubagens, rotas, totais de peso e volume, além dos veículos recomendados.</p>
+    </div>
+    <%= link_to new_cargo_path, class: "inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 px-4 py-2 font-semibold text-[#06131E] shadow-md shadow-emerald-950/20 transition-all hover:from-emerald-500 hover:to-teal-400 hover:scale-[1.02]" do %>
+      <%= lucide_icon(:plus, css: "h-4 w-4") %>
+      Nova cubagem
+    <% end %>
+  </div>
+
+  <div class="overflow-hidden rounded-lg border border-[#1E294B] bg-[#131B2E]/40 backdrop-blur-md shadow-xl shadow-slate-950/20">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[820px] text-left text-sm">
+        <thead class="bg-[#090D16]/50 text-xs uppercase text-[#94A3B8] border-b border-[#1E294B]">
+          <tr>
+            <th class="px-5 py-3 font-semibold">Cliente</th>
+            <th class="px-5 py-3 font-semibold">Rota</th>
+            <th class="px-5 py-3 font-semibold">Peso</th>
+            <th class="px-5 py-3 font-semibold">Volume</th>
+            <th class="px-5 py-3 font-semibold">Veículo</th>
+            <th class="px-5 py-3 text-right font-semibold">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#1E294B]/60">
+          <% @cargos.each do |cargo| %>
+            <tr class="transition-colors duration-150 hover:bg-[#1E294B]/20">
+              <td class="px-5 py-4">
+                <%= link_to cargo.customer_name, cargo, class: "font-semibold text-[#F8FAFC] hover:text-emerald-400 transition-colors" %>
+              </td>
+              <td class="px-5 py-4 text-[#94A3B8]">
+                <div class="flex items-center gap-1.5">
+                  <%= lucide_icon(:route, css: "h-3.5 w-3.5 text-slate-500") %>
+                  <span><%= cargo.origin %> para <%= cargo.destination %></span>
+                </div>
+              </td>
+              <td class="px-5 py-4 text-[#F8FAFC] font-medium"><%= number_with_precision(cargo.total_weight_kg, precision: 2) %> kg</td>
+              <td class="px-5 py-4 text-[#F8FAFC] font-medium"><%= number_with_precision(cargo.total_volume_m3, precision: 3) %> m³</td>
+              <td class="px-5 py-4">
+                <% if cargo.recommended_vehicle.present? %>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-400 ring-1 ring-emerald-500/20">
+                    <%= lucide_icon(:truck, css: "h-3 w-3") %>
+                    <%= cargo.recommended_vehicle.name %>
+                  </span>
+                <% else %>
+                  <span class="text-slate-500 text-xs italic">Sem sugestão</span>
+                <% end %>
+              </td>
+              <td class="px-5 py-4">
+                <div class="flex justify-end gap-2">
+                  <%= link_to cargo, class: "inline-flex items-center gap-1.5 rounded-md border border-[#1E294B] bg-[#090D16] px-3 py-1.5 text-xs font-semibold text-[#F8FAFC] transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30" do %>
+                    <%= lucide_icon(:eye, css: "h-3.5 w-3.5") %>
+                    Visualizar
+                  <% end %>
+                  <%= link_to edit_cargo_path(cargo), class: "inline-flex items-center gap-1.5 rounded-md border border-[#1E294B] bg-[#090D16] px-3 py-1.5 text-xs font-semibold text-[#F8FAFC] transition-all hover:border-emerald-500/40 hover:bg-emerald-500/10 hover:text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30" do %>
+                    <%= lucide_icon(:edit, css: "h-3.5 w-3.5") %>
+                    Editar
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

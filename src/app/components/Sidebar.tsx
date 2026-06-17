@@ -28,8 +28,8 @@ const navigation = [
 
 const roleLabels: Record<string, string> = {
   admin: 'Administrador',
-  manager: 'Gerente',
-  operator: 'Operador',
+  operador: 'Operador',
+  vendedor: 'Vendedor',
 }
 
 export default function Sidebar() {
@@ -135,7 +135,7 @@ export default function Sidebar() {
             <div className="flex items-center gap-3 px-2">
               {/* Avatar */}
               <div className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-sm font-semibold flex-shrink-0">
-                {profile.full_name
+                {profile.name
                   .split(' ')
                   .slice(0, 2)
                   .map((n) => n[0])
@@ -144,7 +144,7 @@ export default function Sidebar() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-[var(--text-primary)] truncate">
-                  {profile.full_name}
+                  {profile.name}
                 </p>
                 <span className="badge badge-accent">
                   {roleLabels[profile.role] || profile.role}

@@ -51,7 +51,7 @@ export default function DashboardPage() {
             Dashboard
           </h1>
           <p className="text-[var(--text-secondary)] mt-1">
-            Bem-vindo{profile?.full_name ? `, ${profile.full_name.split(' ')[0]}` : ''}! Aqui está o resumo da sua operação.
+            Bem-vindo{profile?.name ? `, ${profile.name.split(' ')[0]}` : ''}! Aqui está o resumo da sua operação.
           </p>
         </div>
       </div>

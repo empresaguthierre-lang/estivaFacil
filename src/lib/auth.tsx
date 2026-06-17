@@ -14,10 +14,9 @@ import type { User, AuthError } from '@supabase/supabase-js'
 
 export interface Profile {
   id: string
-  full_name: string
-  role: 'admin' | 'manager' | 'operator'
+  name: string
+  role: 'admin' | 'operador' | 'vendedor'
   company_id: string
-  avatar_url: string | null
   created_at: string
 }
 
@@ -42,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async (userId: string) => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, full_name, role, company_id, avatar_url, created_at')
+        .select('id, name, role, company_id, created_at')
         .eq('id', userId)
         .single()
 

@@ -51,7 +51,7 @@ async function main() {
   let userId = ''
 
   if (userError) {
-    if (userError.message.includes('already exists') || userError.message.includes('already registered')) {
+    if (userError.message.toLowerCase().includes('already') || userError.message.toLowerCase().includes('registered')) {
       console.log('Usuário já cadastrado no Auth. Buscando ID...')
       const { data: listData, error: listError } = await supabase.auth.admin.listUsers()
       if (listError) {
